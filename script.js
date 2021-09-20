@@ -13,6 +13,7 @@ let asideWidth = leftAside.offsetWidth
 let gridCells = 108
 let gridKeyCount = 0
 
+let itemCount = 0
 let coloredCount = 0
 
 
@@ -34,7 +35,9 @@ function getRandom(max) {
 
 function createElement(){
     let newItem = document.createElement('div')
+    itemCount++
     newItem.classList.add('grid-item')
+    newItem.classList.add('item-' + itemCount)
     mainGrid.appendChild(newItem)
     newItemHeight = newItem.offsetWidth
     newItemWidth = newItem.offsetWidth
@@ -54,6 +57,7 @@ function createElement(){
 
 function createColored() {
     let newColored = document.createElement('div')
+    coloredCount++
     newColored.classList.add('colored-item')
     newColored.classList.add('colored' + coloredCount)
     mainGrid.appendChild(newColored)
@@ -70,9 +74,9 @@ function moveItem() {
         item[i].addEventListener('click', function () {
             if (coloredCount < gridCells) {
                 getPosition(item[i])
-                moveColored()
-                coloredCount++
-                createColored()
+                moveColored(item[i])
+                
+
             }else{
                 alert('You reached Maximum')
             }
@@ -80,14 +84,18 @@ function moveItem() {
         })
     }
 }
-function moveColored() {
+function moveColored(underlayer) {
     let movingItem = document.querySelector('.colored' + coloredCount)
-    console.log(itemTop);
-    console.log(itemLeft);
+    movingItem.classList.add(underlayer.classList[1])
+    
     movingItem.style.marginLeft = '0px'
     movingItem.classList.add('colored-moved')
     movingItem.style.top = itemTop + 'px'
     movingItem.style.left = itemLeft + 'px'
+
+    movingItem.classList.add('locked')
+    createColored()
+    return 'locked'
 }
 function getPosition(element) {
     itemLeft = element.offsetLeft
